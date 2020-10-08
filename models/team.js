@@ -12,12 +12,12 @@ const teamSchema = new Schema({
     //     name: {
     //         type: String
     //     },
-    //     email: {
+    //     regno: {
     //         type: String
     //     }
     // }],
     password: String,
-    email: String,
+    code: String,
 }, {
     timestamps: true
 });

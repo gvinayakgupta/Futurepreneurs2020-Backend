@@ -9,7 +9,7 @@ const Team = require("../models/team");
 
 const router = express.Router();
 
-router.get('/reg', async (req, res) => {
+router.post('/reg', async (req, res) => {
     const { name, password, email } = req.body;
     const found = await Team.findOne({
         email
@@ -33,8 +33,6 @@ router.get('/reg', async (req, res) => {
             });
     })
 });
-
-
 
 //At end
 module.exports = router;
