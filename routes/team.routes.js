@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const saltRounds = 10;
 // const bodyParser = require("body-parser");
 
 require("dotenv").config();
@@ -26,7 +25,9 @@ router.post('/reg', async (req, res) => {
                 name,
                 adminPass: hash1,
                 specPass: hash2,
-                code
+                code,
+                amenSub: false,
+                camSub: false
             })
             await team.save().then((result) => {
                 console.log(result);
@@ -57,7 +58,9 @@ router.post('/login', async (req, res) => {
                             teamId: team[0]._id,
                             code: team[0].code,
                             name: team[0].name,
-                            userType: "S"
+                            userType: "S",
+                            amenSub: team[0].amenSub,
+                            camSub: team[0].camSub
                         },
                         process.env.jwtSecret,
                         {
@@ -71,7 +74,9 @@ router.post('/login', async (req, res) => {
                             teamId: team[0]._id,
                             code: team[0].code,
                             name: team[0].name,
-                            userType: "S"
+                            userType: "S",
+                            amenSub: team[0].amenSub,
+                            camSub: team[0].camSub
                         },
                         token: token,
                     });

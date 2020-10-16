@@ -3,26 +3,32 @@ const Schema = mongoose.Schema;
 
 const amenitiesSchema = new Schema({
     teamCode: String,
-    pre: [{
-        name: String,
-        cost: Number
-    }],
-    eco: [{
-        name: String,
-        cost: Number
-    }],
-    preM: {
-        name: String,
-        cost: Number
+    premium: {
+        amenities: [{
+            name: String,
+            cost: Number
+        }],
+        marketing: {
+            name: String,
+            cost: Number
+        },
+        number: Number,
+        reason: String,
+        cpr: Number
     },
-    ecoM: {
-        name: String,
-        cost: Number
+    standard: {
+        amenities: [{
+            name: String,
+            cost: Number
+        }],
+        marketing: {
+            name: String,
+            cost: Number
+        },
+        number: Number,
+        reason: String,
+        cpr: Number
     },
-    preRoom : Number,
-    ecoRoom: Number,
-    Preason: String,
-    Ereason: String,
     totalCost: String
 }, {
     timestamps: true

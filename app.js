@@ -9,6 +9,7 @@ require("dotenv").config();
 
 ////routers
 const teamRoutes = require('./routes/team.routes');
+const amenitiesRoutes = require('./routes/amenities.routes');
 
 
 const app = express();
@@ -57,7 +58,7 @@ app.use(bodyParser.json());
 
 
 app.use('/team', teamRoutes);
-// app.use('/event',eventRoutes)
+app.use('/amenities',amenitiesRoutes)
 // app.use('/certificate', certificateRoutes)
 // //  apply to all requests
 // app.use(limiter);

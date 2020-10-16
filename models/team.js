@@ -7,6 +7,8 @@ const teamSchema = new Schema({
     code: String,
     adminPass: String,
     specPass: String,
+    amenSub: Boolean,
+    camSub: Boolean
 }, {
     timestamps: true
 });
