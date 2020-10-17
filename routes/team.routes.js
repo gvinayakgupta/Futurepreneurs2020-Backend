@@ -47,6 +47,32 @@ router.post('/login', async (req, res) => {
         .then((team) => {
             console.log(team)
             if (team.length < 1) {
+                if(process.env.adminCode === req.body.code && process.env.adminPass === req.body.password) {
+                    console.log("Admin Login");
+                    console.log(req);
+                    const token = jwt.sign(
+                        {
+                            teamId: "admin",
+                            code: "admin",
+                            name: "admin",
+                            userType: "A"
+                        },
+                        process.env.jwtSecret,
+                        {
+                            expiresIn: "1d",
+                        }
+                    );
+                    return res.status(200).json({
+                        message: "Auth successful",
+                        teamDetails: {
+                            teamId: "admin",
+                            code: "admin",
+                            name: "admin",
+                            userType: "A"
+                        },
+                        token: token,
+                    });
+                }
                 return res.status(401).json({
                     message: "Auth failed: Email not found probably",
                 });
