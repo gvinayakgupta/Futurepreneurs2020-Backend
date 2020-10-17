@@ -11,6 +11,7 @@ require("dotenv").config();
 const teamRoutes = require('./routes/team.routes');
 const amenitiesRoutes = require('./routes/amenities.routes');
 const adminRoutes = require('./routes/admin.routes');
+const campaignRoutes = require('./routes/campaign.routes');
 
 const app = express();
 
@@ -59,8 +60,9 @@ app.use((req, res, next) => {
 
 
 app.use('/team', teamRoutes);
-app.use('/amenities', amenitiesRoutes)
-app.use('/admin', adminRoutes)
+app.use('/amenities', amenitiesRoutes);
+app.use('/admin', adminRoutes);
+app.use('/campaign', campaignRoutes);
 // //  apply to all requests
 // app.use(limiter);
 
