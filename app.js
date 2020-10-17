@@ -25,7 +25,7 @@ mongoose
 	.then(() => console.log("Database Connected"))
 	.catch((err) => console.log(err));
 
-mongoose.Promise = global.Promise; 
+mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -36,20 +36,37 @@ app.use(bodyParser.json());
 
 
 // Allow CORS
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept, Authorization,auth-token"
-	);
-	if (req.method === "OPTIONS") {
-		res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-		return res.status(200).json({});
-	}
-	next();
-});
+// app.use((req, res, next) => {
+// 	console.log(req)
+// 	res.header("Access-Control-Allow-Origin", "*");
+// 	res.header(
+// 		"Access-Control-Allow-Headers",
+// 		"Origin, X-Requested-With, Content-Type, Accept, Authorization,auth-token"
+// 	);
+// 	if (req.method === "OPTIONS") {
+// 		res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+// 		return res.status(200).json({});
+// 	}
+// 	next();
+// });
 
-app.use(cors());
+const corsOpt = {
+	origin: '*',
+
+	methods: [
+		'GET',
+		'POST',
+		'PUT',
+		'PATCH',
+		'DELETE'
+	],
+
+	allowedHeaders: [
+		'Content-Type',
+	],
+};
+
+app.use(cors(corsOpt));
 // /////Rate Limiter
 // const limiter = rateLimit({
 // 	windowMs: 15 * 60 * 1000, // 15 minutes
@@ -58,7 +75,7 @@ app.use(cors());
 
 
 app.use('/team', teamRoutes);
-app.use('/amenities',amenitiesRoutes)
+app.use('/amenities', amenitiesRoutes)
 // app.use('/certificate', certificateRoutes)
 // //  apply to all requests
 // app.use(limiter);
