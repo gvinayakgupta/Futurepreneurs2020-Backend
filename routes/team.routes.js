@@ -49,7 +49,6 @@ router.post('/login', async (req, res) => {
             if (team.length < 1) {
                 if(process.env.adminCode === req.body.code && process.env.adminPass === req.body.password) {
                     console.log("Admin Login");
-                    console.log(req);
                     const token = jwt.sign(
                         {
                             teamId: "admin",
