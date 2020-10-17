@@ -36,37 +36,22 @@ app.use(bodyParser.json());
 
 
 // Allow CORS
-// app.use((req, res, next) => {
-// 	console.log(req)
-// 	res.header("Access-Control-Allow-Origin", "*");
-// 	res.header(
-// 		"Access-Control-Allow-Headers",
-// 		"Origin, X-Requested-With, Content-Type, Accept, Authorization,auth-token"
-// 	);
-// 	if (req.method === "OPTIONS") {
-// 		res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-// 		return res.status(200).json({});
-// 	}
-// 	next();
-// });
+app.use(cors());
+app.use((req, res, next) => {
+	console.log(req)
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept, Authorization,auth-token"
+	);
+	if (req.method === "OPTIONS") {
+		res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+		return res.status(200).json({});
+	}
+	next();
+});
 
-const corsOpt = {
-	origin: '*',
 
-	methods: [
-		'GET',
-		'POST',
-		'PUT',
-		'PATCH',
-		'DELETE'
-	],
-
-	allowedHeaders: [
-		'Content-Type',
-	],
-};
-
-app.use(cors(corsOpt));
 // /////Rate Limiter
 // const limiter = rateLimit({
 // 	windowMs: 15 * 60 * 1000, // 15 minutes
