@@ -16,7 +16,7 @@ router.post('/reg', async (req, res) => {
     });
     if (found) {
         console.log("Code Exists");
-        return res.status(403).json({ message: "Team Code Already Exist" });
+        return res.status(201).json({ message: "Team Code Already Exist" });
     }
     bcrypt.hash(adminPass, 10, async (err1, hash1) => {
         bcrypt.hash(specPass, 10, async (err2, hash2) => {
@@ -31,11 +31,14 @@ router.post('/reg', async (req, res) => {
             })
             await team.save().then((result) => {
                 console.log(result);
-                return res.status(201).json({ result });
+                return res.status(200).json({
+                    message: "Team Registered Successfully!",
+                    result
+                });
             })
                 .catch((err) => {
                     console.log(err);
-                    return res.status(500).json({ message: "Failed" });
+                    return res.status(201).json({ message: "Failed" });
                 });
         })
     })
@@ -47,7 +50,7 @@ router.post('/login', async (req, res) => {
         .then((team) => {
             console.log(team)
             if (team.length < 1) {
-                if(process.env.adminCode === req.body.code && process.env.adminPass === req.body.password) {
+                if (process.env.adminCode === req.body.code && process.env.adminPass === req.body.password) {
                     console.log("Admin Login");
                     const token = jwt.sign(
                         {
@@ -72,7 +75,7 @@ router.post('/login', async (req, res) => {
                         token: token,
                     });
                 }
-                return res.status(401).json({
+                return res.status(201).json({
                     message: "Auth failed: Email not found probably",
                 });
             }
@@ -113,7 +116,9 @@ router.post('/login', async (req, res) => {
                                     teamId: team[0]._id,
                                     code: team[0].code,
                                     name: team[0].name,
-                                    userType: "L"
+                                    userType: "L",
+                                    amenSub: team[0].amenSub,
+                                    camSub: team[0].camSub
                                 },
                                 process.env.jwtSecret,
                                 {
@@ -127,12 +132,14 @@ router.post('/login', async (req, res) => {
                                     teamId: team[0]._id,
                                     code: team[0].code,
                                     name: team[0].name,
-                                    userType: "L"
+                                    userType: "L",
+                                    amenSub: team[0].amenSub,
+                                    camSub: team[0].camSub
                                 },
                                 token: token,
                             });
                         }
-                        return res.status(401).json({
+                        return res.status(201).json({
                             message: "Auth failed",
                         });
                     });

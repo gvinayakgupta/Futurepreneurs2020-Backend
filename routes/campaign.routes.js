@@ -12,7 +12,7 @@ router.post('/add', checkAuth, async (req, res) => {
         if(team.camSub === true) {
             console.log(team);
             console.log("Already Submitted!");
-            return res.status(400).json({message: "Campaign already Submitted"})
+            return res.status(201).json({message: "Campaign already Submitted"})
         }
     }) 
     const { description, imageUrl } = req.body;
@@ -25,11 +25,14 @@ router.post('/add', checkAuth, async (req, res) => {
     await camp.save().then(async (result) => {
         await Team.updateOne({ code: req.team.code }, { $set: { camSub: true } });
         console.log(result);
-        return res.status(201).json({ result });
+        return res.status(200).json({
+            message: "Successfull!",
+            result
+        });
     })
         .catch((err) => {
             console.log(err);
-            return res.status(500).json({ message: "Failed" });
+            return res.status(201).json({ message: "Failed" });
         });
 });
 
@@ -39,7 +42,7 @@ router.get('/get', checkAuth, async (req, res) => {
         .then((camp) => {
             console.log(camp)
             if (camp.length < 1) {
-                return res.status(401).json({
+                return res.status(201).json({
                     message: "Not yet Submitted",
                 });
             }
@@ -49,7 +52,7 @@ router.get('/get', checkAuth, async (req, res) => {
             });
         })
         .catch((err) => {
-            res.status(500).json({
+            res.status(201).json({
                 message: "Team not found",
                 error: err,
             });
