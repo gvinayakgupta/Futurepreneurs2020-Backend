@@ -4,6 +4,8 @@ const checkAuth = require('../middleware/checkAuth');
 
 require("dotenv").config();
 const Team = require("../models/team");
+const Amenities = require("../models/amenities");
+const Campaign = require("../models/campaign");
 
 const router = express.Router();
 
@@ -58,8 +60,36 @@ router.get('/getTeam', checkAuth, async (req, res) => {
     }
     await Team.find({ code: req.body.code }).exec().then((team) => {
         if (team.length > 0) {
-            console.log(team);
-            return res.status(200).json({ result: team });
+            let T = team[0], A = null, C = null;
+            if (team[0].amenSub === true) {
+                Amenities.find({ teamCode: T.code })
+                    .exec()
+                    .then((amenity) => {
+                        if (amenity.length < 1) {
+                            A = amenity[0];
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                        return res.status(201).json({ message: "Unexpected Error" });
+                    })
+            }
+            if (team[0].camSub === true) {
+                Campaign.find({ teamCode: T.code })
+                    .exec()
+                    .then((campaign) => {
+                        if (campaign.length < 1) {
+                            C = campaign[0];
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                        return res.status(201).json({ message: "Unexpected Error" });
+                    })
+            }
+            return res.status(200).json({
+                team: T,
+                Amenities: A,
+                Campaign: C
+            });
         } else {
             console.log('Team Not Found:', req.body.code);
             return res.status(201).json({ message: "Team Not Found" });

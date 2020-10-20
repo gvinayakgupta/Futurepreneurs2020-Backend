@@ -5,11 +5,11 @@ const amenitiesSchema = new Schema({
     teamCode: String,
     premium: {
         amenities: [{
-            name: String,
+            title: String,
             cost: Number
         }],
         marketing: {
-            name: String,
+            title: String,
             cost: Number
         },
         number: Number,
@@ -18,11 +18,11 @@ const amenitiesSchema = new Schema({
     },
     standard: {
         amenities: [{
-            name: String,
+            title: String,
             cost: Number
         }],
         marketing: {
-            name: String,
+            title: String,
             cost: Number
         },
         number: Number,
