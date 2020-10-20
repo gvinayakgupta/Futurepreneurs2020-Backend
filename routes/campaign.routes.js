@@ -15,11 +15,13 @@ router.post('/add', checkAuth, async (req, res) => {
             return res.status(201).json({message: "Campaign already Submitted"})
         }
     }) 
-    const { description, imageUrl } = req.body;
+    const { description, imageUrl, tagline, hotelName } = req.body;
     const camp = new Campaign({
         _id: new mongoose.Types.ObjectId(),
         description, 
         imageUrl,
+        tagline,
+        hotelName,
         teamCode: req.team.code
     })
     await camp.save().then(async (result) => {

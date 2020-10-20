@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 const campaignSchema = new Schema({
     teamCode: String,
     description: String,
+    tagline: String,
+    hotelName: String,
     imageUrl: String
 }, {
     timestamps: true
