@@ -13,6 +13,10 @@ router.post('/add', checkAuth, async (req, res) => {
             console.log(team);
             console.log("Already Submitted!");
             return res.status(201).json({message: "Campaign already Submitted"})
+        } else if (team.amenSub === false) {
+            console.log(team);
+            console.log("Amenities not yet Submitted!");
+            return res.status(201).json({message: "Amenities not yet Submitted"})
         }
     }) 
     const { description, imageUrl, tagline, hotelName } = req.body;

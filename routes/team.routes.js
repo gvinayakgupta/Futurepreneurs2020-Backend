@@ -14,9 +14,13 @@ router.post('/reg', async (req, res) => {
     const found = await Team.findOne({
         code
     });
-    if (found) {
+    if (found || code === "FPadmin") {
         console.log("Code Exists");
         return res.status(201).json({ message: "Team Code Already Exist" });
+    }
+    if(adminPass === specPass) {
+        console.log("Same Passwords Attempt");
+        return res.status(201).json({ message: "Both passwords cannot match" });
     }
     bcrypt.hash(adminPass, 10, async (err1, hash1) => {
         bcrypt.hash(specPass, 10, async (err2, hash2) => {
