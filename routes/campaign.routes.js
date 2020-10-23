@@ -8,7 +8,7 @@ const Campaign = require("../models/campaign");
 const router = express.Router();
 
 router.post('/add', checkAuth, async (req, res) => {
-    (await Team.findOne({ code: req.team.code })).execPopulate().then((team) => {
+    (await Team.findOne({ code: req.team.code })).execPopulate().then(async(team) => {
         if (team.camSub === true) {
             console.log(team);
             console.log("Already Submitted!");
