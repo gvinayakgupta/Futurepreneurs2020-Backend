@@ -53,45 +53,69 @@ router.get('/getNotCampaign', checkAuth, async (req, res) => {
     })
 });
 
-router.get('/getTeam', checkAuth, async (req, res) => {
+router.get('/getTeam/:code', checkAuth, async (req, res) => {
     if (req.team.userType !== "A") {
         console.log("Not an admin");
         return res.status(201).json({ message: "Authentication Failed.. not admin" })
     }
-    await Team.find({ code: req.body.code }).exec().then((team) => {
+    console.log(req.params);
+    await Team.find({ code: req.params.code }).exec().then(async (team) => {
+        console.log(team)
         if (team.length > 0) {
             let T = team[0], A = null, C = null;
             if (team[0].amenSub === true) {
                 Amenities.find({ teamCode: T.code })
                     .exec()
                     .then((amenity) => {
-                        if (amenity.length < 1) {
+                        if (amenity.length > 0) {
                             A = amenity[0];
                         }
-                    }).catch((err) => {
-                        console.log(err)
-                        return res.status(201).json({ message: "Unexpected Error" });
-                    })
-            }
-            if (team[0].camSub === true) {
-                Campaign.find({ teamCode: T.code })
-                    .exec()
-                    .then((campaign) => {
-                        if (campaign.length < 1) {
-                            C = campaign[0];
+                        if(team[0].camSub === true) {
+                            Campaign.find({ teamCode: T.code })
+                            .exec()
+                            .then((campaign) => {
+                                if (campaign.length > 0) {
+                                    C = campaign[0];
+                                }
+                                console.log({
+                                    team: T,
+                                    Amenities: A,
+                                    Campaign: C
+                                })
+                                return res.status(200).json({
+                                    team: T,
+                                    Amenities: A,
+                                    Campaign: C
+                                });
+                            }).catch((err) => {
+                                console.log(err)
+                                return res.status(201).json({ message: "Unexpected Error" });
+                            })
+                        } else {
+                            console.log({
+                                team: T,
+                                Amenities: A
+                            })
+                            return res.status(200).json({
+                                team: T,
+                                Amenities: A
+                            });
                         }
                     }).catch((err) => {
                         console.log(err)
                         return res.status(201).json({ message: "Unexpected Error" });
                     })
+
+            } else {
+                console.log({
+                    team: T
+                })
+                return res.status(200).json({
+                    team: T
+                });
             }
-            return res.status(200).json({
-                team: T,
-                Amenities: A,
-                Campaign: C
-            });
         } else {
-            console.log('Team Not Found:', req.body.code);
+            console.log('Team Not Found:', req.params.code);
             return res.status(201).json({ message: "Team Not Found" });
         }
     }).catch((err) => {
