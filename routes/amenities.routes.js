@@ -8,33 +8,34 @@ const Amenities = require("../models/amenities");
 const router = express.Router();
 
 router.post('/add', checkAuth, async (req, res) => {
-    (await Team.findOne({code: req.team.code})).execPopulate().then((team) => {
-        if(team.amenSub === true) {
+    (await Team.findOne({ code: req.team.code })).execPopulate().then((team) => {
+        if (team.amenSub === true) {
             console.log(team);
             console.log("Already Submitted!");
-            return res.status(201).json({message: "Amenities already Submitted"})
+            return res.status(201).json({ message: "Amenities already Submitted" })
+        } else {
+            const { premium, standard, totalCost } = req.body;
+            const amenity = new Amenities({
+                _id: new mongoose.Types.ObjectId(),
+                premium,
+                standard,
+                totalCost,
+                teamCode: req.team.code
+            })
+            await amenity.save().then(async (result) => {
+                await Team.updateOne({ code: req.team.code }, { $set: { amenSub: true } });
+                console.log(result);
+                return res.status(200).json({
+                    message: "Successfull!",
+                    result
+                });
+            })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(201).json({ message: "Failed" });
+                });
         }
     })
-    const { premium, standard, totalCost } = req.body;
-    const amenity = new Amenities({
-        _id: new mongoose.Types.ObjectId(),
-        premium,
-        standard,
-        totalCost,
-        teamCode: req.team.code
-    })
-    await amenity.save().then(async (result) => {
-        await Team.updateOne({ code: req.team.code }, { $set: { amenSub: true } });
-        console.log(result);
-        return res.status(200).json({
-            message: "Successfull!",
-            result
-        });
-    })
-        .catch((err) => {
-            console.log(err);
-            return res.status(201).json({ message: "Failed" });
-        });
 });
 
 router.get('/get', checkAuth, async (req, res) => {
